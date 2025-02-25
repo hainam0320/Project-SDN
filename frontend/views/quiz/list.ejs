@@ -1,0 +1,6 @@
+<h2>Danh sách Quiz</h2>
+<ul>
+    <% quizzes.forEach(quiz => { %>
+        <li><%= quiz.title %> - <a href="/quizzes/<%= quiz.id %>">Chi tiết</a></li>
+    <% }) %>
+</ul>

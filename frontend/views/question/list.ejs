@@ -1,0 +1,6 @@
+<h2>Danh sách Câu hỏi</h2>
+<ul>
+    <% questions.forEach(question => { %>
+        <li><%= question.text %> - Quiz ID: <%= question.quizId %></li>
+    <% }) %>
+</ul>
