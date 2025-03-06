@@ -1,61 +1,61 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [formData, setFormData] = useState({
+        email: "",
+        password: "",
+        phone: "",
+        address: "",
+        bio: ""
+    });
+
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
     const handleRegister = async (e) => {
         e.preventDefault();
-        setError("");
-
         try {
-            const res = await fetch("http://localhost:5000/api/auth/register", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, email, password }),
-            });
-
-            const data = await res.json();
-
-            if (!res.ok) {
-                throw new Error(data.message);
-            }
-
+            await axios.post("http://localhost:5000/api/auth/register", formData);
             alert("Đăng ký thành công!");
-            navigate("/login"); // Chuyển hướng về trang Login
-        } catch (error) {
-            setError(error.message);
+            navigate("/"); // Quay về trang login sau khi đăng ký
+        } catch (err) {
+            setError(err.response?.data?.msg || "Đăng ký thất bại");
         }
     };
 
     return (
-        <div className="container d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
-            <div className="card p-4" style={{ width: "400px" }}>
-                <h2 className="text-center">Đăng ký</h2>
-                {error && <p className="text-danger text-center">{error}</p>}
-                <form onSubmit={handleRegister}>
-                    <div className="mb-3">
-                        <label className="form-label">Tên</label>
-                        <input type="text" className="form-control" value={name} onChange={(e) => setName(e.target.value)} required />
-                    </div>
-                    <div className="mb-3">
-                        <label className="form-label">Email</label>
-                        <input type="email" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                    </div>
-                    <div className="mb-3">
-                        <label className="form-label">Mật khẩu</label>
-                        <input type="password" className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                    </div>
-                    <button type="submit" className="btn btn-primary w-100">Đăng ký</button>
-                </form>
-                <p className="text-center mt-3">
-                    Đã có tài khoản? <a href="/login">Đăng nhập</a>
-                </p>
-            </div>
+        <div className="container mt-5">
+            <h2>Đăng Ký</h2>
+            {error && <p className="text-danger">{error}</p>}
+            <form onSubmit={handleRegister}>
+                <div className="mb-3">
+                    <label>Email:</label>
+                    <input type="email" name="email" className="form-control" onChange={handleChange} required />
+                </div>
+                <div className="mb-3">
+                    <label>Mật khẩu:</label>
+                    <input type="password" name="password" className="form-control" onChange={handleChange} required />
+                </div>
+                <div className="mb-3">
+                    <label>Số điện thoại:</label>
+                    <input type="text" name="phone" className="form-control" onChange={handleChange} required />
+                </div>
+                <div className="mb-3">
+                    <label>Địa chỉ:</label>
+                    <input type="text" name="address" className="form-control" onChange={handleChange} required />
+                </div>
+                <div className="mb-3">
+                    <label>Tiểu sử:</label>
+                    <textarea name="bio" className="form-control" onChange={handleChange} required />
+                </div>
+                <button type="submit" className="btn btn-primary">Đăng ký</button>
+            </form>
         </div>
     );
 };

@@ -20,15 +20,25 @@ const authenticateToken = (req, res, next) => {
 // Đăng ký tài khoản
 router.post("/register", async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { email, password, phone, address, bio } = req.body;
 
+        // Kiểm tra xem email đã tồn tại chưa
         let user = await User.findOne({ email });
         if (user) return res.status(400).json({ msg: "Email đã được sử dụng" });
 
+         // Mã hóa mật khẩu
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
-
-        user = new User({ email, password: hashedPassword });
+ 
+         // Tạo user mới
+        user = new User({
+            email,
+            password: hashedPassword,
+            phone,
+            address,
+            bio,
+            roleId: 1
+        });
         await user.save();
 
         res.status(201).json({ msg: "Tạo tài khoản thành công" });

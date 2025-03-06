@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -33,9 +33,15 @@ const Login = () => {
                         <div className="mb-3">
                             <label>Mật khẩu</label>
                             <input type="password" className="form-control" onChange={(e) => setPassword(e.target.value)} />
+                            <div className="text-end mt-1">
+                                <Link to="/forgot-password" className="text-decoration-none">Quên mật khẩu?</Link>
+                            </div>
                         </div>
                         <button type="submit" className="btn btn-primary">Đăng nhập</button>
                     </form>
+                    <p className="mt-3">
+                        Chưa có tài khoản? <Link to="/register">Đăng ký ngay</Link>
+                    </p>
                 </div>
             </div>
         </div>
